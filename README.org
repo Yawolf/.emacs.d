@@ -1,4 +1,7 @@
 * Configuration
+
+This configuration has been savagely copied from [[https://github.com/Ironjanowar/.emacs.d][this Ironjanowar's repository]]
+
 - Install Emacs.
 - Make sure you have no *.emacs*. You only need an empty *.emacs.d*
   directory, or simply install Emacs, delete *.emacs.d* and *.emacs*
@@ -13,4 +16,4 @@
 
 Show me!!
 
-[[./images/elixir_and_neotree.png]]
+[[./images/screenEmacs.png]]

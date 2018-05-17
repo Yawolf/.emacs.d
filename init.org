@@ -131,9 +131,14 @@ Cleaner interface, cleaner life.
   ;;   :ensure t
   ;;   :config (load-theme 'gruvbox-dark-hard t))
 
-  (use-package rebecca-theme
-    :ensure t
-    :config (load-theme 'rebecca t))
+  ;; (use-package rebecca-theme
+  ;;   :ensure t
+  ;;   :config (load-theme 'rebecca t))
+
+  (use-package color-theme-sanityinc-tomorrow
+     :ensure t
+     :config (load-theme 'sanityinc-tomorrow-eighties t))
+
 #+END_SRC
 
 ** Powerline
@@ -152,10 +157,10 @@ I wanted a symbol in the left hand so I con move with *<symbol> +
 #+BEGIN_SRC elisp :tangle ./settings/interface-settings.el :mkdirp yes
 
 (use-package windmove
-  :bind (("C-. <up>" . windmove-up)
-         ("C-. <left>" . windmove-left)
-         ("C-. <right>" . windmove-right)
-         ("C-. <down>" . windmove-down))
+  :bind (("M-C-<up>" . windmove-up)
+         ("M-C-<left>" . windmove-left)
+         ("M-C-<right>" . windmove-right)
+         ("M-C-<down>" . windmove-down))
   )
 #+END_SRC
 
@@ -429,6 +434,13 @@ Edit with root user, open a file and execute ~M-x sudo-edit~
     :ensure t)
 #+END_SRC
 
+** Move alt to Cmd
+#+BEGIN_SRC elisp :tangle ./settings/editing-settings.el :mkdirp yes
+   ;; Moves alt to Command
+   (setq mac-option-modifier nil
+       mac-command-modifier 'meta
+       x-select-enable-clipboard t)
+#+END_SRC
 ** Provide
 Provide *editing-settings.el*
 
@@ -503,7 +515,51 @@ A lot of well...
   :ensure t
   :init (global-flycheck-mode))
 #+END_SRC
+** Ensime
+#+BEGIN_SRC elisp :tangle ./settings/programming-settings.el :mkdirp yes
+;; This is ensime for emacs
+(use-package ensime
+  :ensure t
+  :pin melpa-stable
+  :init
+  (put 'ensime-auto-generate-config 'safe-local-variable #'booleanp)
+  (setq
+    ensime-startup-snapshot-notification nil
+    ensime-startup-notification nil)
+  :config
+  ;; (require 'ensime-expand-region)
+  (add-hook 'git-timemachine-mode-hook (lambda () (ensime-mode 0))))
+(require 'ensime)
+(add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
+#+END_SRC
+** That horrible SBT
+#+BEGIN_SRC elisp :tangle ~/.sbt/0.13/plugins/plugins.sbt :mkdirp yes
+addSbtPlugin("org.ensime" % "sbt-ensime" % "2.5.1")
+addSbtPlugin("io.get-coursier" % "sbt-coursier" % "1.0.0-RC13")
+#+END_SRC
 
+#+BEGIN_SRC elisp :tangle ~/.sbt/0.13/global.sbt :mkdirp yes
+import org.ensime.EnsimeCoursierKeys._
+import org.ensime.EnsimeKeys._
+
+ensimeIgnoreMissingDirectories in ThisBuild := true
+cancelable in Global := true
+ensimeIgnoreScalaMismatch := true
+#+END_SRC
+
+#+BEGIN_SRC elisp :tangle ~/.sbt/1.0/plugins/plugins.sbt :mkdirp yes
+addSbtPlugin("org.ensime" % "sbt-ensime" % "2.5.1")
+addSbtPlugin("io.get-coursier" % "sbt-coursier" % "1.0.0-RC13")
+#+END_SRC
+
+#+BEGIN_SRC elisp :tangle ~/.sbt/1.0/global.sbt :mkdirp yes
+import org.ensime.EnsimeCoursierKeys._
+import org.ensime.EnsimeKeys._
+
+ensimeIgnoreMissingDirectories in ThisBuild := true
+cancelable in Global := true
+ensimeIgnoreScalaMismatch := true
+#+END_SRC
 ** Provide
 
 Providing *programming-settings.el*
@@ -748,6 +804,7 @@ JavaScript, CSS, HTML ...
 ** Scala
 
 #+BEGIN_SRC elisp :tangle ./settings/programming-language-settings.el :mkdirp yes
+;; This is Scala for emacs!
   (use-package scala-mode
     :ensure t)
 
@@ -1078,7 +1135,7 @@ Magit is a lovely mode for git.
 ;; Magit
 (use-package magit
   :ensure t
-  :bind (("C-c g" . magit-status)
+  :bind (("M-m" . magit-status)
          ("C-x M-g" . magit-dispatch-popup))
   )
 #+END_SRC
